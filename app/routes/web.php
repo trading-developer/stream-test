@@ -36,18 +36,12 @@ Route::group(['namespace' => 'App\Http\Controllers'], static function () {
             ->where(['id' => '[0-9]+'])
             ->name('broadcast.show');
 
+        Route::get('/broadcast/create', [BroadcastController::class, 'showCreateAction'])
+            ->name('broadcast.showCreate');
 
-        //
-
-
+        Route::post('/broadcast/create', [BroadcastController::class, 'createAction'])
+            ->name('broadcast.create');
     });
-
-    Route::get('/broadcast/create', [BroadcastController::class, 'showCreateAction'])
-        ->name('broadcast.showCreate');
-
-    Route::post('/broadcast/create', [BroadcastController::class, 'createAction'])
-        ->name('broadcast.create');
-
 });
 
 
