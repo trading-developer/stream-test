@@ -1,0 +1,44 @@
+version: '3'
+services:
+  stream-app-nginx:
+    image: nginx:latest
+    restart: always
+    container_name: stream-app-nginx
+    volumes:
+      - ./images/nginx:/etc/nginx/conf.d
+      - ../app:/var/www/app
+      - ./logs/nginx:/var/log/nginx
+    depends_on:
+      - stream-app-php
+    ports:
+      - "84:80"
+    networks:
+      - stream_app
+
+  stream-app-php:
+    build: ./images/php
+    restart: always
+    container_name: stream-app-php
+    environment:
+      APP_DEBUG: 1
+    volumes:
+      - ../app:/var/www/app
+      - ./images/php/custom_php.ini:/usr/local/etc/php/conf.d/custom_php.ini
+    networks:
+      - stream_app
+
+  stream-app-postgres:
+    image: postgres:12.2-alpine
+    container_name: stream-app-postgres
+    environment:
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: HCK6LrwUsVu64ZdF
+      POSTGRES_DB: streams
+    restart: always
+    ports:
+      - "5432:5432"
+    networks:
+      - stream_app
+
+networks:
+  stream_app:
